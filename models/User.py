@@ -1,5 +1,6 @@
 from dbconfig import db
 from sqlalchemy.sql import func
+from bcrypt import hashpw, gensalt, checkpw
 
 
 class User(db.Model):
@@ -33,3 +34,9 @@ class User(db.Model):
             "password": self.password,
             "photo_url": self.photo_url
         }
+
+    def hash_password(self):
+        self.password = hashpw(self.password.encode('utf-8'), gensalt())
+
+    def verify_password(self, password):
+        return checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
