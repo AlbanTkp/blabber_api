@@ -15,6 +15,9 @@ class Message(db.Model):
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
+    discussion = relationship("Discussion", back_populates="messages")
+    reactions = relationship("Reaction", back_populates="message")
+
     def __repr__(self):
         return f'<Message {self.id}>'
 

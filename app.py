@@ -1,3 +1,5 @@
+from sqlalchemy.orm import registry
+
 from middlewares.auth import jwt_middleware
 from models.User import User
 from models.Request import Request
@@ -11,12 +13,14 @@ from dbconfig import app
 from dbconfig import db
 from flask import request
 from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity
-
 from utils.helpers import sendError, sendResponse
+import traceback
 
-app.config['JWT_SECRET_KEY'] = 'votre_clé_secrète'
+app.config['JWT_SECRET_KEY'] = 'BLABBER'
 jwt = JWTManager(app)
 
+mapper_registry = registry()
+mapper_registry.configure()
 
 @app.post('/users')
 def storeUser():
@@ -26,10 +30,6 @@ def storeUser():
         email = request.json.get('email')
         password = request.json.get('password')
         photo_url = request.json.get('photo_url')
-
-        existing_user = User.query.filter_by(email=email).first()
-        if existing_user:
-            return sendError("Cet utilisateur existe déjà", code=400)
 
         user = User(firstname=firstname, lastname=lastname, email=email, password=password, photo_url=photo_url)
         user.hash_password()
@@ -41,7 +41,7 @@ def storeUser():
 
         return sendResponse("SUCCESS", {'access_token': access_token})
     except Exception as e:
-        return sendError(str(e), code=500)
+        return sendError(str(e), data={"trace": traceback.format_exc()}, code=500)
 
 
 @app.post('/login')
