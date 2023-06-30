@@ -1,3 +1,36 @@
+# Fichiers spécifiques à Flask
+/__pycache__/
+instance/
+*.pyc
+*.pyo
+*.pyd
+
+# Fichiers de configuration
 db_config.py
-**/__pycache__/
-venv
+config.py
+
+# Environnement virtuel
+venv/
+
+# Fichiers de journalisation
+*.log
+
+# Fichiers de sauvegarde
+*.bak
+
+# Fichiers de base de données
+db.sqlite3
+
+# Dossiers générés par l'IDE
+.idea/
+.vscode/
+
+# Fichiers de compilation
+*.pyc
+*.pyo
+*.pyd
+
+# Fichiers de sauvegarde de l'éditeur
+*~
+\#*\#
+
