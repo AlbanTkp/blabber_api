@@ -1,3 +1,4 @@
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from dbconfig import db
 
@@ -11,6 +12,8 @@ class Reaction(db.Model):
     emoji = db.Column(db.String(100))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+
+    message = relationship("Message", back_populates="reactions")
 
     def __repr__(self):
         return f'<Reaction {self.id}>'

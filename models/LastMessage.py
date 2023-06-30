@@ -1,3 +1,4 @@
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from dbconfig import db
 
@@ -12,6 +13,8 @@ class LastMessage(db.Model):
     file = db.Column(db.String(100))
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+
+    discussion = relationship("Discussion", back_populates="last_message")
 
     def __repr__(self):
         return f'<Discussion {self.id}>'

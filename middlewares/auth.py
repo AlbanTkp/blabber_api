@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from flask_jwt_extended import decode_token, get_jwt_identity
+from flask_jwt_extended import decode_token, get_jwt_identity, jwt_required
 from functools import wraps
 
 from models.User import User
@@ -7,6 +7,7 @@ from utils.helpers import sendError
 
 
 def jwt_middleware(f):
+    @jwt_required()
     @wraps(f)
     def decorated_function(*args, **kwargs):
         try:
@@ -18,7 +19,7 @@ def jwt_middleware(f):
             user_id = get_jwt_identity()
             user = User.query.get(user_id)
             if not user:
-                return jsonify({'message': 'Token manquant'}), 401
+                return sendError("Token incorrect", code=401)
             request.user = user
 
             return f(*args, **kwargs)
