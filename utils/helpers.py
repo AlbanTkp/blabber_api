@@ -1,4 +1,4 @@
-from flask import jsonify, make_response
+from flask import jsonify, make_response, request
 
 
 def sendResponse(message, result=None, code=200):
@@ -25,3 +25,13 @@ def sendError(error, data=None, code=200):
         'Content-Type': 'application/json'
     }
     return make_response(jsonify(response), code, headers)
+
+
+import time
+
+
+def renameFile(filename):
+    current_time_millis = int(time.time() * 1000)
+    extension = filename.split('.')[-1].lower()
+    new_filename = f"{current_time_millis}.{extension}"
+    return new_filename
