@@ -15,21 +15,27 @@ class Participant(db.Model):
     is_archived_chat = db.Column(db.Boolean, default=False)
     added_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
-    discussion = relationship("Discussion", back_populates="participants")
+    discussion = relationship("Discussion", back_populates="participants", uselist=False)
+    user = relationship("User", backref="participations", uselist=False)
 
     def __repr__(self):
         return f'<Participant {self.id}>'
 
-    def __init__(self, user_id, is_admin):
+    def __init__(self, user_id, discussion_id, is_admin=False, has_new_notif=False):
         self.user_id = user_id
         self.is_admin = is_admin
+        self.discussion_id = discussion_id
 
-    def to_dict(self):
+    def toDict(self):
         return {
             "id": self.id,
             "user_id": self.user_id,
+            "discussion_id": self.discussion_id,
             "is_admin": self.is_admin,
             "has_new_notif": self.has_new_notif,
             "is_archived_chat": self.is_archived_chat,
-            "added_at": self.added_at
+            "added_at": self.added_at,
+            "user": self.user.toDict()
         }
+
+
